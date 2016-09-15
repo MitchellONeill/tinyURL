@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="main.css" type="text/css"/>
+</head>
+<body>
+  <h3>
+  <%= 'LongURL to TinyURL database' %>
+  </h3>
+   <ul>
+    <% for(var key in table) {%>
+      <li>
+      <a href="<%=key%>"> <%=key%> </a> -
+       (<%= table[key] %>)
+      <form method="Get" action="/urls/new">
+        <button type="submit">Return to Form</button>
+      </form>
+      </li>
+    </ul>
+</body>
+</html>
