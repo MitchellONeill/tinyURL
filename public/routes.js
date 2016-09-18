@@ -1,4 +1,9 @@
-module.exports = function(app, db) {
+var app = express();
+app.set("view engine", "ejs");
+var methodOverride = require('method-override');
+var urlDatabase = {};
+
+module.exports = function(app) {
 
   app.get("/urls/new", (req, res) => {
     res.render("urls_new");
@@ -11,6 +16,7 @@ module.exports = function(app, db) {
   app.post("/urls", (req, res) => {
     let shortURL = generateRandomString()
     let longURL = req.body.longURL
+    console.log(req.body);
     if (!longURL.match(/^https?:\/\//)) longURL = 'https://' + longURL;
     urlDatabase[shortURL] = longURL;
     res.redirect ("/urls")
