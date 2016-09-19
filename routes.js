@@ -1,18 +1,6 @@
-// "use strict";
-// var express = require("express");
-// var app = express();
-// var methodOverride = require('method-override');
-// var connect = require('connect');
+
    const MongoClient = require("mongodb").MongoClient;
    const MONGODB_URI = "mongodb://127.0.0.1:27017/url_shortener";
-// const bodyParser = require("body-parser");
-// app.use(bodyParser.urlencoded({
-//   extended: true
-// }));
-// app.set("view engine", "ejs");
-// app.use(express.static('public'));
-// app.use(methodOverride('_method'));
-
 
 function connectAndThen(cb) {
   MongoClient.connect(MONGODB_URI, (err, db) => {
@@ -40,10 +28,11 @@ function getLongURL(db, shortURL, cb) {
 }
 
 
-
-
-
 module.exports = function(app) {
+
+  app.get("/", (req, res) => {
+   res.redirect("/urls/new");
+  });
 
   app.get("/urls/new", (req, res) => {
     res.render("urls_new");
@@ -57,7 +46,6 @@ module.exports = function(app) {
       console.log("Connected to db then did this!");
       db.collection("url").find().toArray((err, urls) => {
         templateVars = {table: urls}
-        debugger;
         res.render("urls_index", templateVars);
     });
   });
@@ -83,15 +71,30 @@ module.exports = function(app) {
   });
 
   app.get("/u/:id", (req, res) => {
-    console.log('process has begun')
     let shortURL = req.params.id;
+    console.log('youve been redirected');
       connectAndThen(function(err, db) {
         getLongURL(db, shortURL, (err, longURL) => {
-        console.log('do we have a long: ',longURL);
-      res.redirect(longURL);
+          res.redirect(301, longURL);
       });
     });
   });
+
+  app.get("/urls/:id", (req, res) => {
+    let shortURL = req.params.id;
+    let query = { "shortURL" : shortURL};
+    connectAndThen(function(err, db) {
+    db.collection("url").findOne(query, (err, url) => {
+    if (err) {
+      return cb(err);
+    }
+    let dbItem = {table: url};
+    debugger;
+    res.render('urls_id', dbItem);
+   });
+  });
+  });
+
 
    app.delete('/urls/:id', (req, res) => {
       let shortURL = req.params.id;
@@ -113,9 +116,5 @@ module.exports = function(app) {
         res.redirect('/urls');
       });
     });
-
-
-
-
 };
 
