@@ -2,9 +2,14 @@
 <html lang="en">
 <body>
   <ul>
-  <% Object.keys(table).forEach(function(key) { %>
-  <li><%= key + ' - ' + table[key]%></li>
-  <% }); %>
+  <% for (key in table) { %>
+  <li><%= table[key].shortURL + ' - ' + table[key].longURL%></li>
+  <% }; %>
   </ul>
 </body>
 </html>
+
+
+<!-- <% Object.keys(table).forEach(function(key) { %>
+  <li><%= key + ' - ' + table[key]%></li>
+  <% }); %> -->

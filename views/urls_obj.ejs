@@ -4,34 +4,30 @@
   <link rel="stylesheet" href="main.css" type="text/css"/>
 </head>
 <body>
-  <h3>
-  <%= 'LongURL to TinyURL database' %>
-  </h3>
+  <h3>LongURL to TinyURL database</h3>
    <ul>
-    <% for(var key in table) { %>
+    <% for (var key in table) { %>
       <li>
-      <a href=<%='/'+key%>> <%=key%> </a> -
-       (<%= table[key] %>)
-       <% var actURL = '/urls/' + key + "?_method=DELETE" %>
-       <% var actURLe = '/urls/' + key + "?_method=PUT" %>
+      <a href='/u/<%=table[key].shortURL %>'> <%=table[key].shortURL%> </a> -
+       <% var actURL = '/urls/' + table[key].shortURL + "?_method=DELETE" %>
+       <% var actURLe = '/urls/' + table[key].shortURL + "?_method=PUT" %>
       <form method='POST' action=<%=actURLe%>>
-        <label>Edit URL:</label>
-        <input value='<%= table[key] %>' name='urledit'></input>
+        <input value='<%= table[key].longURL %>' name='urledit'></input>
         <button type='submit'>Edit</button>
       </form>
       <form method="POST" action=<%=actURL%>>
-        <a href='<%=actURL%>' class='btn'></a>
         <button type="submit">Delete</button>
       </form>
        <% };%>
       <div>
       <form method="Get" action="/urls/new">
-      <button type="submit">Return to Form</button>
+      <button type="submit">Add New URL</button>
       </form>
       </div>
       </li>
     </ul>
 </body>
 </html>
+
 
 

@@ -4,6 +4,7 @@
   "description": "assignment 2: url shortener",
   "main": "express_server.js",
   "scripts": {
+    "start": "node express_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mitchell O'Neill",
@@ -13,6 +14,7 @@
     "ejs": "^1.0.0",
     "express": "^4.14.0",
     "method-override": "^2.3.6",
+    "mongodb": "^2.2.10",
     "nodemon": "^1.10.2"
   }
 }
