@@ -1,6 +1,5 @@
-
-   const MongoClient = require("mongodb").MongoClient;
-   const MONGODB_URI = "mongodb://127.0.0.1:27017/url_shortener";
+const MongoClient = require("mongodb").MongoClient;
+const MONGODB_URI = "mongodb://127.0.0.1:27017/url_shortener";
 
 function connectAndThen(cb) {
   MongoClient.connect(MONGODB_URI, (err, db) => {
@@ -20,10 +19,11 @@ function generateRandomString(){
 function getLongURL(db, shortURL, cb) {
   let query = { "shortURL": shortURL };
   db.collection("url").findOne(query, (err, result) => {
+    debugger;
     if (err) {
       return cb(err);
     }
-    return cb(null, result.longURL);
+    return cb(err, result.longURL);
   });
 }
 
@@ -40,13 +40,9 @@ module.exports = function(app) {
 
   app.get("/index", (req, res)=> {
     connectAndThen(function(err, db) {
-      if (err){
-        console.log('with errors:' + err);
-      }
       console.log("Connected to db then did this!");
       db.collection("url").find().toArray((err, urls) => {
-        templateVars = {table: urls}
-        res.render("urls_index", templateVars);
+        res.render("urls_index", {table: urls});
     });
   });
   });
@@ -84,23 +80,21 @@ module.exports = function(app) {
     let shortURL = req.params.id;
     let query = { "shortURL" : shortURL};
     connectAndThen(function(err, db) {
-    db.collection("url").findOne(query, (err, url) => {
-    if (err) {
-      return cb(err);
-    }
-    let dbItem = {table: url};
-    debugger;
-    res.render('urls_id', dbItem);
-   });
-  });
+      db.collection("url").findOne(query, (err, url) => {
+      if (err) {
+        return cb(err);
+      }
+      res.render('urls_id', url);
+      });
+    });
   });
 
 
    app.delete('/urls/:id', (req, res) => {
       let shortURL = req.params.id;
       connectAndThen(function(err, db) {
-      db.collection("url").remove({shortURL: shortURL});
-      res.redirect('/urls');
+        db.collection("url").remove({shortURL: shortURL});
+        res.redirect('/urls');
       });
     });
 
@@ -112,7 +106,7 @@ module.exports = function(app) {
       }
       let shortURL = req.params.id;
       connectAndThen(function(err, db) {
-      db.collection("url").update({shortURL: shortURL}, {$set: {longURL: edit}})
+        db.collection("url").update({shortURL: shortURL}, {$set: {longURL: edit}})
         res.redirect('/urls');
       });
     });

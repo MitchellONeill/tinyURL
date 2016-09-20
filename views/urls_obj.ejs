@@ -4,9 +4,7 @@
   <link rel="stylesheet" href="main.css" type="text/css"/>
 </head>
 <body>
-  <h3>
-  <%= 'LongURL to TinyURL database' %>
-  </h3>
+  <h3>LongURL to TinyURL database</h3>
    <ul>
     <% for (var key in table) { %>
       <li>
@@ -18,7 +16,6 @@
         <button type='submit'>Edit</button>
       </form>
       <form method="POST" action=<%=actURL%>>
-        <a href='<%=actURL%>' class='btn'></a>
         <button type="submit">Delete</button>
       </form>
        <% };%>
